@@ -1,6 +1,8 @@
-import { useCustomerStoreActions, useCustomerStoreValue } from "@/stores/customers";
+import {
+  useCustomerStoreActions,
+  useCustomerStoreValue,
+} from "@/stores/customers";
 import { useEffect } from "react";
-
 
 export function useCustomers() {
   const customers = useCustomerStoreValue();

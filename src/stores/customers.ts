@@ -21,8 +21,6 @@ export function useCustomerStoreActions() {
     const a: Array<CustomerState> = customers.map((customer: Customer) => {
       return { ...customer, product: productsMap[customer.product] };
     });
-    console.log('a', a);
-    
     setCustomer(a);
   };
 
@@ -31,5 +29,5 @@ export function useCustomerStoreActions() {
 }
 
 export const useCustomerStoreValue = () => {
-    return useRecoilValue(CustomerStore)
+  return useRecoilValue(CustomerStore);
 };
