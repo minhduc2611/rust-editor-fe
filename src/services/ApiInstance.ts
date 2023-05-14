@@ -40,7 +40,7 @@ class ApiInstance {
     );
   }
 
-  public async get<T>(path: string): Promise<T[]> {
+  public async get<T>(path: string): Promise<T> {
     try {
       const response: AxiosResponse = await this.axiosInstance.get(path);
       return response.data;

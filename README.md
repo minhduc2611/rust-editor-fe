@@ -7,15 +7,15 @@ sequenceDiagram
     participant Hook
     participant Store
     participant ApiService
-    participant Helpers
+    participant Helpers/Utils
 
 	Component->>Hook: uses
 	Hook->>Store: uses
 	Hook->>Hook: uses
 	Store->>ApiService: uses
-	ApiService->>Helpers : uses
-	Store->>Helpers : uses
-	Hook->>Helpers : uses
+	ApiService->>Helpers/Utils : uses
+	Store->>Helpers/Utils : uses
+	Hook->>Helpers/Utils : uses
 ```
 
 #### Slash ở đằng sau BaseURL
