@@ -1,4 +1,15 @@
-
+#### Clear Code Structure
+```plantuml
+@startuml
+Component --> Hook: uses
+Hook --> Store: uses
+Hook --> Hook: uses
+Store --> ApiService: uses
+ApiService --> Helpers : uses
+Store --> Helpers : uses
+Hook --> Helpers : uses
+@enduml
+```
 
 
 #### Slash ở đằng sau BaseURL
