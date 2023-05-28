@@ -2,15 +2,13 @@ import {
   useCustomerStoreActions,
   useCustomerStoreValue,
 } from "@/stores/customers";
-import { useEffect } from "react";
 
+// reference: ST8: 1 store property ứng với 1 hook
 export function useCustomers() {
-  const customers = useCustomerStoreValue();
-  const { getCustomers } = useCustomerStoreActions();
+  const { customers } = useCustomerStoreValue();
+  const { getCustomers, setCustomers, updateCustomer } = useCustomerStoreActions();
 
-  useEffect(() => {
-    getCustomers();
-  }, []);
-
-  return { customers };
+  // reference: ST7: hạn chế call API useEffect trong custom hook
+  console.log('customers', customers)
+  return { customers, getCustomers, setCustomers, updateCustomer };
 }

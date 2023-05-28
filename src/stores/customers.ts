@@ -2,30 +2,48 @@ import { atom, selector, useRecoilValue, useSetRecoilState } from "recoil";
 import { Builder } from "builder-pattern";
 import CustomerService from "../services/CustomerService";
 import ProductService from "../services/ProductService";
-import { Customer, CustomerState } from "../models/customer";
+import { Customer, CustomerStoreModal, CustomerWithProduct } from "../models/customer";
 import { Product } from "../models/product";
 import ListUtils from "../helpers/listUtils";
 
-export const CustomerStore = atom<Array<CustomerState>>({
+export const CustomerStore = atom<CustomerStoreModal>({
   key: "CustomerStore",
-  default: [],
+  default: Builder<CustomerStoreModal>()
+  .customers([])
+  .build(),
 });
 
+// Store actions should be here in store file
 export function useCustomerStoreActions() {
-  const setCustomer = useSetRecoilState(CustomerStore);
+  
+  const setCustomerStore = useSetRecoilState(CustomerStore);
 
   const getCustomers = async () => {
     const customers = await CustomerService.getCustomers();
+
     const products = await ProductService.getProducts();
+
+    // map products to customer
     const productsMap = ListUtils.listToMap<Product>(products, "id");
-    const a: Array<CustomerState> = customers.map((customer: Customer) => {
+
+    const customersWithProduct: CustomerWithProduct[] = customers.map((customer: Customer) => {
       return { ...customer, product: productsMap[customer.product] };
     });
-    setCustomer(a);
+
+    console.log('customersWithProduct', customersWithProduct);
+
+    setCustomerStore({ customers: customersWithProduct });
   };
 
-  const setCustomers = async (customers: Customer) => {};
-  return { getCustomers, setCustomers };
+  const updateCustomer = async (customers: Customer) => {
+    // code here
+  };
+
+  const setCustomers = async (customers: Customer) => {
+    // code here
+  };
+
+  return { getCustomers, setCustomers, updateCustomer};
 }
 
 export const useCustomerStoreValue = () => {

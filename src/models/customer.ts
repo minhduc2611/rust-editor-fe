@@ -7,10 +7,15 @@ export interface Customer {
   product: number;
   id: string;
 }
-export interface CustomerState {
+
+export interface CustomerWithProduct {
   createdAt: string;
   name: string;
   avatar: string;
   product: Product;
   id: string;
+}
+
+export interface CustomerStoreModal {
+  customers: CustomerWithProduct[];
 }
