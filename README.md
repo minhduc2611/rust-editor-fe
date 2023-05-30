@@ -185,3 +185,17 @@ export const CustomerStore = atom<Array<CustomerState>>({
 	},
 };
 ```
+
+#### :policeman: ST9: đặt tên, 
+```ts
+// don't
+const list: BreadcrumbItems[] = route.matched.map()
+```
+
+```ts
+// do
+const breadcrumbs: BreadcrumbItems[] = route.matched.map()
+```
+
+
+https://github.com/felixge/node-style-guide
