@@ -30,8 +30,6 @@ export function useCustomerStoreActions() {
       return { ...customer, product: productsMap[customer.product] };
     });
 
-    console.log('customersWithProduct', customersWithProduct);
-
     setCustomerStore({ customers: customersWithProduct });
   };
 

@@ -1,7 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
-import { RecoilRoot, SetRecoilState } from 'recoil';
+import { RecoilRoot } from 'recoil';
 
 export default function RecoilProvider({
   children,

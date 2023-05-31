@@ -2,8 +2,8 @@ import { Customer } from "../models/customer";
 import { mainApiInstance } from "./Instances";
 
 class CustomerService {
-  path = "cus/";
-  apiInstance = mainApiInstance;
+  private path = "cus/";
+  private apiInstance = mainApiInstance;
 
   getCustomer = async (id: string) => {
     return await this.apiInstance.get(this.path + id);

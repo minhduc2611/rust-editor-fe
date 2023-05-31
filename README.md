@@ -147,17 +147,18 @@ const Component = () => {
 };
 ```
 
-- Trong custom hook, 1 useEffect dùng để access DOM thì ok 
+- Trong custom hook, 1 useEffect dùng để access DOM thì ok
+
 ```js
-// ok 
+// ok
 export function useCustomers() {
   const customers = useCustomerStoreValue();
   const { getCustomers } = useCustomerStoreActions();
 
   useEffect(() => {
-    document.mediaQueryList.addEventListener('change', () => {
+    document.mediaQueryList.addEventListener("change", () => {
       getCustomers();
-    })
+    });
   }, []);
 
   return { customers };
@@ -165,6 +166,7 @@ export function useCustomers() {
 ```
 
 #### :policeman: ST8: 1 store property ứng với 1 hook
+
 - Đóng vai trò như 1 service, mọi component và hook đều có thể sử dụng hook này để lấy dữ liệu từ store
 - Có thể hình dùng loại hook này như tầng Repository nếu bạn quen thuộc với Java
 
@@ -186,16 +188,53 @@ export const CustomerStore = atom<Array<CustomerState>>({
 };
 ```
 
-#### :policeman: ST9: đặt tên, 
+#### :policeman: ST9: đặt tên,
+
 ```ts
 // don't
-const list: BreadcrumbItems[] = route.matched.map()
+const list: BreadcrumbItems[] = route.matched.map();
 ```
 
 ```ts
 // do
-const breadcrumbs: BreadcrumbItems[] = route.matched.map()
+const breadcrumbs: BreadcrumbItems[] = route.matched.map();
 ```
 
+###
+- ensure type 
+```js
+
+//do
+return Builder<EnrollmentModel>()
+    .displayInfo(enrollmentResponse.displayInfo)
+    .totalEnrollment(enrollmentResponse.total)
+    .createdAt(enrollmentResponse.createdAt)
+    .deadline(enrollmentResponse.deadline)
+    .isOpen(enrollmentResponse.isOpen)
+    .emailAlarm(enrollmentResponse.emailAlarm)
+    .emailAlarmManager(enrollmentResponse.emailAlarmManager)
+    .creatorName(enrollmentResponse.creatorName)
+    .creatorEmployeeNumber(enrollmentResponse.creator)
+    .updatedAt(enrollmentResponse.updatedAt)
+    .isHidden(enrollmentResponse.isHidden)
+    .profileUrl('src/assets/img/brown.jpg')
+    .build();
+
+//don't
+return {
+    displayInfo: enrollmentResponse.displayInfo,
+    totalEnrollment: enrollmentResponse.total,
+    createdAt: enrollmentResponse.createdAt,
+    deadline: enrollmentResponse.deadline,
+    isOpen: enrollmentResponse.isOpen,
+    emailAlarm: enrollmentResponse.emailAlarm,
+    emailAlarmManager: enrollmentResponse.emailAlarmManager,
+    creatorName: enrollmentResponse.creatorName,
+    creatorEmployeeNumber: enrollmentResponse.creator,
+    updatedAt: enrollmentResponse.updatedAt,
+    isHidden: enrollmentResponse.isHidden,
+    profileUrl: 'src/assets/img/brown.jpg'
+}
+```
 
 https://github.com/felixge/node-style-guide
