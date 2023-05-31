@@ -201,7 +201,7 @@ const breadcrumbs: BreadcrumbItems[] = route.matched.map();
 ```
 
 ###
-- ensure type 
+- using builder pattern will ensure type each property 
 ```js
 
 //do
