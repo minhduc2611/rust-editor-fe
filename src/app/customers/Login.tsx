@@ -32,7 +32,7 @@ export default function Login() {
         <div>
 
         <button
-         className='relative w-28 h-10 z-2 top-0 translate-y-[30px] translate-x-[40px] hover:bg-gray-300'
+         className ='relative w-28 h-10 z-2 top-0 translate-y-[30px] translate-x-[40px] hover:bg-gray-300'
          >
             <span className='mr-2 hover:bg-gray-300'>↚ </span> 
             Back
