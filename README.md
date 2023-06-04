@@ -38,7 +38,7 @@ NEXT_PUBLIC_MAIN_ENDPOINT=https://5bf0b7fb0756d20013119887.mockapi.io/api/dealer
 ```js
 // don't
 const useMenu = () => {
-  const { category: submenu, getCatagories } = useCategory(); // should not rename
+  const { category: submenu, getCatagories } = useCategory(); // should not rename from `category` to `submenu`
 	const menus = [
 		{
 			name: 'menuA'
@@ -200,8 +200,8 @@ const list: BreadcrumbItems[] = route.matched.map();
 const breadcrumbs: BreadcrumbItems[] = route.matched.map();
 ```
 
-###
-- using builder pattern will ensure type each property 
+#### :policeman: ST10: dùng builder pattern
+- using builder pattern will ensure type of each property 
 ```js
 
 //do
@@ -236,5 +236,8 @@ return {
     profileUrl: 'src/assets/img/brown.jpg'
 }
 ```
+
+#### :policeman: ST11: 1 function không nhận quá 2 params
+- nếu nhiều hơn 2 params thì group lại thành 1 object
 
 https://github.com/felixge/node-style-guide
