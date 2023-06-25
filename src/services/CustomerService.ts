@@ -1,4 +1,4 @@
-import { Customer } from "../models/customer";
+import { Customer } from "../shared/models/customer";
 import { mainApiInstance } from "./Instances";
 
 class CustomerService {
