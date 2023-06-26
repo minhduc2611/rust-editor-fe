@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Maybe } from '../models/Utility';
+import { Maybe } from '../types/common';
 
 class ApiInstance {
   private baseURL: string;
