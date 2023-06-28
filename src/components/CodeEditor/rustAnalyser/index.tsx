@@ -1,21 +1,32 @@
 // import {exampleCode} from './example-code.js';
-import fake_std from "!!raw-loader!./fake_std.rs?raw";
-import fake_core from "!!raw-loader!./fake_core.rs?raw";
-import fake_alloc from "!!raw-loader!./fake_alloc.rs?raw";
-import { conf, grammar } from "./rust-grammar";
+import fake_std from "./fake_std.rs?raw";
+import fake_core from "./fake_core.rs?raw";
+import fake_alloc from "./fake_alloc.rs?raw";
+import { conf, grammar } from "./rust-grammar.tsx";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+
+type Monaco = typeof monaco;
+
+type StateType = {
+  update: (arg: string) => void;
+};
+
+interface monacoType {
+  editor: Object;
+  SelectionDirection: Object;
+}
 
 class RustAnalyserEngine {
-  state;
-  allTokens;
+  state: StateType | Object | undefined;
+  allTokens: string | undefined;
   modeId = "rust";
-  monaco;
-  worker;
-  async startRustAnalyserEngine(monaco) {
+  monaco: monacoType | Object | undefined;
+  worker: Object | undefined;
+  async startRustAnalyserEngine(monaco: Monaco) {
     if (!monaco || (typeof monaco !== "object" && !monaco.editor)) {
       throw new Error("Monaco is not defined");
     }
     this.monaco = monaco;
-    console.log("Starting Rust Analyser Engine", monaco);
     // var loadingText = document.createTextNode("Loading wasm...");
     // document.body.appendChild(loadingText);
 
@@ -25,12 +36,11 @@ class RustAnalyserEngine {
     // let state = null; //await createRA();
 
     const update = async () => {
-      const content = model.getValue()
-      console.log('when editor change content', content);
+      const content = model.getValue();
       const res = await this.state.update(content);
       monaco.editor.setModelMarkers(model, this.modeId, res.diagnostics);
       this.allTokens = res.highlights;
-    }
+    };
 
     monaco.editor.defineTheme("vscode-dark-plus", {
       base: "vs-dark",
@@ -47,25 +57,17 @@ class RustAnalyserEngine {
     });
     // document.body.removeChild(loadingText);
     const initRA = async () => {
-      console.log("2", monaco);
 
       monaco.languages.onLanguage(this.modeId, async () => {
         monaco.languages.setLanguageConfiguration(modeId, conf);
         monaco.languages.setMonarchTokensProvider(modeId, grammar);
       });
       this.state = await this.createRA();
-      console.log("state CREATED", {
-        state: this.state,
-        fake_std,
-        fake_core,
-        fake_alloc,
-      });
+   
       await this.registerRA(monaco);
-      console.log(">>>>> INIT", monaco);
 
-       this.state.init(model.getValue(), fake_std, fake_core, fake_alloc);
-    console.log(">>>>> UPDATE", monaco);
-     update();
+      this.state.init(model.getValue(), fake_std, fake_core, fake_alloc);
+      update();
       model.onDidChangeContent(update);
     };
     initRA();
@@ -77,13 +79,10 @@ class RustAnalyserEngine {
     // window.onresize = () => myEditor.layout();
   }
   async createRA() {
-    console.log("Starting createRA");
     try {
-      this.worker = new Worker(new URL("ra-worker.js", import.meta.url));
+      this.worker = new Worker(new URL("ra-worker.tsx", import.meta.url));
     } catch (e) {
-      console.log("Worker FAILED");
     }
-    console.log("Worker created", this.worker);
     const pendingResolve = {};
 
     let id = 1;
@@ -113,7 +112,6 @@ class RustAnalyserEngine {
     };
 
     this.worker.onmessage = (e) => {
-      console.log("[worker receive onmessage]", e.data);
       if (e.data.id == "ra-worker-ready" || !e.data.result) {
         ready(new Proxy({}, proxyHandler));
         return;
@@ -130,11 +128,9 @@ class RustAnalyserEngine {
     });
   }
   async registerRA(monaco) {
-    console.log("state registerRA", this.state);
     const state = this.state;
     monaco.languages.registerHoverProvider(this.modeId, {
       provideHover: (_, pos) => {
-        console.log("Hover", pos);
         return state.hover(pos.lineNumber, pos.column);
       },
     });
@@ -151,7 +147,7 @@ class RustAnalyserEngine {
             range: pos,
             uri: m.uri,
           }));
-          
+
           return {
             range,
             command: {
@@ -161,7 +157,6 @@ class RustAnalyserEngine {
             },
           };
         });
-        console.log("CodeLens", m);
         return { lenses, dispose() {} };
       },
     });
@@ -175,14 +170,11 @@ class RustAnalyserEngine {
         if (references) {
           return references.map(({ range }) => ({ uri: m.uri, range }));
         }
-        console.log("Reference", pos);
       },
     });
     monaco.languages.registerInlayHintsProvider(this.modeId, {
       async provideInlayHints(model, range, token) {
-        console.log("InlayHints", state);
         let hints = await state.inlay_hints();
-        console.log("InlayHints hints", hints);
 
         return {
           hints: hints.map((hint) => {
@@ -213,13 +205,11 @@ class RustAnalyserEngine {
     });
     monaco.languages.registerDocumentHighlightProvider(this.modeId, {
       async provideDocumentHighlights(_, pos) {
-        console.log("DocumentHighlight");
         return await state.references(pos.lineNumber, pos.column, true);
       },
     });
     monaco.languages.registerRenameProvider(this.modeId, {
       async provideRenameEdits(m, pos, newName) {
-        console.log("Rename", pos);
         const edits = await state.rename(pos.lineNumber, pos.column, newName);
         if (edits) {
           return {
@@ -231,25 +221,22 @@ class RustAnalyserEngine {
         }
       },
       async resolveRenameLocation(_, pos) {
-        console.log("Rename Location", pos);
         return state.prepare_rename(pos.lineNumber, pos.column);
       },
     });
     monaco.languages.registerCompletionItemProvider(this.modeId, {
       triggerCharacters: [".", ":", "="],
       async provideCompletionItems(_m, pos) {
-        console.log("CompletionItem", pos);
         const suggestions = await state.completions(pos.lineNumber, pos.column);
 
         if (suggestions) {
-          console.log("CompletionItem suggestions", suggestions);
           return {
             suggestions: suggestions.map((el) => ({
               ...el,
               label: el.label,
               kind: el.kind,
               insertText: el.insertText,
-              range: el.range
+              range: el.range,
             })),
           };
         }
@@ -258,7 +245,6 @@ class RustAnalyserEngine {
     monaco.languages.registerSignatureHelpProvider(this.modeId, {
       signatureHelpTriggerCharacters: ["(", ","],
       async provideSignatureHelp(_m, pos) {
-        console.log("SignatureHelp", pos);
         const value = await state.signature_help(pos.lineNumber, pos.column);
         if (!value) return null;
         return {
@@ -269,7 +255,6 @@ class RustAnalyserEngine {
     });
     monaco.languages.registerDefinitionProvider(this.modeId, {
       async provideDefinition(m, pos) {
-        console.log("Definition", pos);
         const list = await state.definition(pos.lineNumber, pos.column);
         if (list) {
           return list.map((def) => ({ ...def, uri: m.uri }));
@@ -278,7 +263,6 @@ class RustAnalyserEngine {
     });
     monaco.languages.registerTypeDefinitionProvider(this.modeId, {
       async provideTypeDefinition(m, pos) {
-        console.log("TypeDefinition", pos);
 
         const list = await state.type_definition(pos.lineNumber, pos.column);
         if (list) {
@@ -288,7 +272,6 @@ class RustAnalyserEngine {
     });
     monaco.languages.registerImplementationProvider(this.modeId, {
       async provideImplementation(m, pos) {
-        console.log("Implementation", pos);
 
         const list = await state.goto_implementation(
           pos.lineNumber,
@@ -301,7 +284,6 @@ class RustAnalyserEngine {
     });
     monaco.languages.registerDocumentSymbolProvider(this.modeId, {
       async provideDocumentSymbols() {
-        console.log("DocumentSymbol");
 
         return await state.document_symbols();
       },
@@ -309,14 +291,12 @@ class RustAnalyserEngine {
     monaco.languages.registerOnTypeFormattingEditProvider(this.modeId, {
       autoFormatTriggerCharacters: [".", "="],
       async provideOnTypeFormattingEdits(_, pos, ch) {
-        console.log("OnTypeFormattingEdit", pos);
 
         return await state.type_formatting(pos.lineNumber, pos.column, ch);
       },
     });
     monaco.languages.registerFoldingRangeProvider(this.modeId, {
       async provideFoldingRanges() {
-        console.log("FoldingRange");
 
         return await state.folding_ranges();
       },
