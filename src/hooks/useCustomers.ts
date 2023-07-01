@@ -5,7 +5,6 @@ export function useCustomers() {
     const { customers } = useCustomerStoreValue();
     const { getCustomers, setCustomers, updateCustomer } = useCustomerStoreActions();
 
-    // reference: ST7: hạn chế call API useEffect trong custom hook
-    console.log('customers', customers);
-    return { customers, getCustomers, setCustomers, updateCustomer };
+  // reference: ST7: hạn chế call API useEffect trong custom hook
+  return { customers, getCustomers, setCustomers, updateCustomer };
 }
