@@ -4,17 +4,22 @@ import CustomerListItem from "./CustomerListItem";
 import { useEffect } from "react";
 
 export default function CustomerList() {
-  const { customers, getCustomers } = useCustomers();
-  
-  useEffect(() => {
-    getCustomers();
-  }, [])
+    const { customers, getCustomers } = useCustomers();
 
-  return (
-    <>
-      {customers.map((customer) => {
-        return (<CustomerListItem customer={customer}  key={customer.id}></CustomerListItem>)
-      })}
-    </>
-  );
+    useEffect(() => {
+        getCustomers();
+    }, []);
+
+    return (
+        <>
+            {customers.map((customer) => {
+                return (
+                    <CustomerListItem
+                        customer={customer}
+                        key={customer.id}
+                    ></CustomerListItem>
+                );
+            })}
+        </>
+    );
 }
