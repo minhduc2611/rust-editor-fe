@@ -1,7 +1,4 @@
-import { AppWindow } from "lucide-react";
-import { FileText } from "lucide-react";
-import { Settings } from "lucide-react";
-import { Sun } from "lucide-react";
+import { AppWindow, FileText, Settings, Sun } from "lucide-react";
 
 export default function Navbar() {
     const style = {
