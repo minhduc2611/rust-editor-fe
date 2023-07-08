@@ -1,6 +1,6 @@
 import { AppWindow, FileText, Settings, Sun } from "lucide-react";
 
-export default function Navbar() {
+export default function Navbar(){
     const style = {
         menu: "flex h-8 w-40 p-2 rounded-md hover:bg-slate-100 cursor-pointer",
         footerMenuSpan: "ml-3 font-medium text-sm pb-1",
