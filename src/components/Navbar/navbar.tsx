@@ -55,7 +55,7 @@ export default function Navbar() {
                      </span>
                 </div>
 
-                <Sun className="text-xl mr-20 w-8 h-8 rounded-md hover:bg-slate-100 p-1.5 " />
+                <Sun className="text-xl mr-20 w-8 h-8 rounded-md hover:bg-slate-100 p-1.5" />
             </div>
         </div>
     );
