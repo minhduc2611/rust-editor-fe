@@ -19,5 +19,4 @@ const nextConfig = {
     return config;
   },
 };
-// (https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1101.jpg)
 module.exports = nextConfig;

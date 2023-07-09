@@ -2,7 +2,7 @@
 import fake_std from "./fake_std.rs?raw";
 import fake_core from "./fake_core.rs?raw";
 import fake_alloc from "./fake_alloc.rs?raw";
-import { conf, grammar } from "./rust-grammar.tsx";
+import { conf, grammar } from "./rust-grammar";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 type Monaco = typeof monaco;
