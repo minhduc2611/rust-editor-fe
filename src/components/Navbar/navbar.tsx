@@ -27,7 +27,7 @@ export default function Navbar() {
             </div>
 
             <div className="footer flex items-end w-screen justify-between font border-t h-16">
-                <div className="icon flex items-center text-xl mr-20  ml-12">
+                <div className="icon flex items-center text-xl mr-20 ml-12">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
