@@ -8,8 +8,8 @@ export default function Navbar() {
     };
 
     return (
-        <div className="Navbar grid h-full h-screen ">
-            <div className="nav grid grid-cols-1 gap-y-8 h-16 mt-20 ml-24 h-[72vh] ">
+        <div className="navbar grid h-full h-screen">
+            <div className="nav grid grid-cols-1 gap-y-8 h-16 mt-20 ml-24 h-[72vh]">
                 <div className="menu grid grid-cols-1 gap-y-3 h-16 mt-1 ml-4 h-12">
                     <div className={style.menu}>
                         <FileText size={18} />
